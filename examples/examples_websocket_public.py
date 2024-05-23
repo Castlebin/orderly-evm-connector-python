@@ -1,7 +1,10 @@
 # from orderly_evm_connector.websocket.websocket_api import WebsocketAPIClient as WebsocketClients
+import json
+
 from utils.config import get_account_info
 import time, logging
 from orderly_evm_connector.websocket.websocket_api import WebsocketPublicAPIClient
+from datetime import datetime
 
 (
     orderly_key,
@@ -18,8 +21,19 @@ def on_close(_):
 
 
 def message_handler(_, message):
+    now = datetime.now()
+    # 获取当前时间戳（毫秒）
+    current_timestamp_ms = int(now.timestamp() * 1000) + now.microsecond // 1000
+
     logging.info(message)
 
+    try:
+        response = json.loads(message)
+        if 'ts' in response:
+            ts = response['ts']
+            logging.info(f"ts={ts} now={current_timestamp_ms}, Time difference: {current_timestamp_ms - ts}")
+    except ValueError:
+        return
 
 # Public websocket does not need to pass orderly_key and orderly_secret arguments
 
@@ -42,7 +56,7 @@ wss_client = WebsocketPublicAPIClient(
 # wss_client.get_24h_ticker('PERP_NEAR_USDC@ticker')
 # wss_client.get_24h_tickers()
 wss_client.get_bbo('PERP_NEAR_USDC@bbo')
-#wss_client.get_bbos()
+wss_client.get_bbos()
 # wss_client.get_kline("PERP_NEAR_USDC@kline_1m")
 # wss_client.get_index_price('PERP_ETH_USDC@indexprice')
 # wss_client.get_index_prices()
