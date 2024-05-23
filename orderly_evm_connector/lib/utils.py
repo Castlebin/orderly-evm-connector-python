@@ -133,16 +133,24 @@ def generate_wallet_signature(wallet_secret, message=None):
 
 def get_endpoints(orderly_testnet):
     # True: Testnet, False: Mainnet
-    if orderly_testnet == 'True':
+    if (orderly_testnet == 'True' or orderly_testnet == 'true'
+            or orderly_testnet == 'testnet' or orderly_testnet == 'Testnet'):
         orderly_endpoint = "https://testnet-api-evm.orderly.org"
         orderly_websocket_public_endpoint = "wss://testnet-ws-evm.orderly.org/ws/stream"
         orderly_websocket_private_endpoint = (
             "wss://testnet-ws-private-evm.orderly.org/v2/ws/private/stream"
         )
-        return (
-            orderly_endpoint,
-            orderly_websocket_public_endpoint,
-            orderly_websocket_private_endpoint,
+    elif orderly_testnet == 'dev-v2':
+        orderly_endpoint = "https://dev-api-v2.orderly.network"
+        orderly_websocket_public_endpoint = "wss://dev-ws-v2.orderly.network/ws/stream"
+        orderly_websocket_private_endpoint = (
+            "wss://dev-ws-private-v2.orderly.network/ws/private/stream"
+        )
+    elif orderly_testnet == 'qa-evm':
+        orderly_endpoint = "https://qa-api-evm.orderly.org"
+        orderly_websocket_public_endpoint = "wss://qa-ws-evm.orderly.network/ws/stream"
+        orderly_websocket_private_endpoint = (
+            "wss://qa-ws-private-evm.orderly.network/ws/private/stream"
         )
     else:
         orderly_endpoint = "https://api-evm.orderly.org"
@@ -150,11 +158,12 @@ def get_endpoints(orderly_testnet):
         orderly_websocket_private_endpoint = (
             "wss://ws-private-evm.orderly.org/v2/ws/private/stream"
         )
-        return (
-            orderly_endpoint,
-            orderly_websocket_public_endpoint,
-            orderly_websocket_private_endpoint,
-        )
+
+    return (
+        orderly_endpoint,
+        orderly_websocket_public_endpoint,
+        orderly_websocket_private_endpoint,
+    )
         
 def get_withdraw_settle_verifyingcontract(orderly_testnet):
     verifyingcontract  = '0x1826B75e2ef249173FC735149AE4B8e9ea10abff' if orderly_testnet else '0x6F7a338F2aA472838dEFD3283eB360d4Dff5D203'
