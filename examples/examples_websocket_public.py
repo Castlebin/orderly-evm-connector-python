@@ -53,11 +53,11 @@ wss_client.request_orderbook('orderbook','PERP_BTC_USDC')
 # #orderbook depth 100 push every 1s
 #wss_client.get_orderbook('PERP_NEAR_USDC@orderbook')
 # #orderbookupdate updated orderbook push every 200ms
-wss_client.get_orderbookupdate('PERP_NEAR_USDC@orderbookupdate')
+wss_client.get_orderbookupdate('PERP_BTC_USDC@orderbookupdate')
 #wss_client.get_trade('PERP_NEAR_USDC@trade')
 #wss_client.get_24h_ticker('PERP_NEAR_USDC@ticker')
 #wss_client.get_24h_tickers()
-#wss_client.get_bbo('PERP_NEAR_USDC@bbo')
+wss_client.get_bbo('PERP_BTC_USDC@bbo')
 #wss_client.get_bbos()
 #wss_client.get_kline("PERP_NEAR_USDC@kline_1m")
 #wss_client.get_index_price('PERP_ETH_USDC@indexprice')
