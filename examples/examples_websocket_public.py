@@ -29,6 +29,8 @@ def message_handler(_, message):
 
     try:
         response = json.loads(message)
+        if 'event' in response and response['event'] == 'ping':
+            return
         if 'ts' in response:
             ts = response['ts']
             logging.info(f"ts={ts} now={current_timestamp_ms}, Time difference: {current_timestamp_ms - ts}")
@@ -52,13 +54,13 @@ wss_client.request_orderbook('orderbook','PERP_BTC_USDC')
 #wss_client.get_orderbook('PERP_NEAR_USDC@orderbook')
 # #orderbookupdate updated orderbook push every 200ms
 wss_client.get_orderbookupdate('PERP_NEAR_USDC@orderbookupdate')
-wss_client.get_trade('PERP_NEAR_USDC@trade')
+#wss_client.get_trade('PERP_NEAR_USDC@trade')
 #wss_client.get_24h_ticker('PERP_NEAR_USDC@ticker')
 #wss_client.get_24h_tickers()
-wss_client.get_bbo('PERP_NEAR_USDC@bbo')
-wss_client.get_bbos()
-wss_client.get_kline("PERP_NEAR_USDC@kline_1m")
-wss_client.get_index_price('PERP_ETH_USDC@indexprice')
+#wss_client.get_bbo('PERP_NEAR_USDC@bbo')
+#wss_client.get_bbos()
+#wss_client.get_kline("PERP_NEAR_USDC@kline_1m")
+#wss_client.get_index_price('PERP_ETH_USDC@indexprice')
 #wss_client.get_index_prices()
 # wss_client.get_mark_price('PERP_ETH_USDC@markprice')
 # wss_client.get_mark_prices()
