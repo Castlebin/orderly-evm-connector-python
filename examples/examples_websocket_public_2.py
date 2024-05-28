@@ -27,7 +27,7 @@ def message_handler(_, message):
     # 获取当前时间戳（毫秒）
     current_timestamp_ms = int(now.timestamp() * 1000) + now.microsecond // 1000
 
-    logging.info(f"thread={threading.current_thread().name} {message}")
+    # logging.info(f"thread={threading.current_thread().name} {message}")
 
     try:
         response = json.loads(message)
@@ -35,7 +35,7 @@ def message_handler(_, message):
         #    return
         if 'ts' in response:
             ts = response['ts']
-            logging.info(f"thread={threading.current_thread().name} ts={ts} now={current_timestamp_ms}, "
+            logging.info(f"thread={threading.current_thread().name} ts={ts} now={current_timestamp_ms}, {message} "
                          f"Time difference: {current_timestamp_ms - ts}")
     except ValueError:
         return
