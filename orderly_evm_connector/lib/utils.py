@@ -140,7 +140,7 @@ def get_endpoints(orderly_testnet):
         orderly_websocket_private_endpoint = (
             "wss://testnet-ws-private-evm.orderly.org/v2/ws/private/stream"
         )
-    elif orderly_testnet == 'dev-v2':
+    elif orderly_testnet == 'dev-v2' or orderly_testnet == 'dev-evm':
         orderly_endpoint = "https://dev-api-v2.orderly.network"
         orderly_websocket_public_endpoint = "wss://dev-ws-v2.orderly.network/ws/stream"
         orderly_websocket_private_endpoint = (
