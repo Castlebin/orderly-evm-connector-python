@@ -42,7 +42,15 @@ def message_handler(_, message):
 
 # Public websocket does not need to pass orderly_key and orderly_secret arguments
 
-def websocket_task(wss_client):
+def websocket_task(no):
+    wss_client = WebsocketPublicAPIClient(
+        orderly_testnet=orderly_testnet,
+        orderly_account_id=orderly_account_id,
+        wss_id=wss_id + str(no),
+        on_message=message_handler,
+        on_close=on_close,
+        debug=True,
+    )
     logging.info(f"Starting websocket task pid: {os.getpid()} , clientId: {wss_client.wss_id}")
     # #Request orderbook data
     #wss_client.request_orderbook('orderbook','PERP_BTC_USDC')
@@ -72,15 +80,7 @@ if __name__ == '__main__':
     pool_size = 10
     p = Pool(pool_size)
     for i in range(pool_size):
-        wss_client = WebsocketPublicAPIClient(
-            orderly_testnet=orderly_testnet,
-            orderly_account_id=orderly_account_id,
-            wss_id=wss_id + str(i),
-            on_message=message_handler,
-            on_close=on_close,
-            debug=True,
-        )
-        p.apply_async(websocket_task, args=(wss_client,))
+        p.apply_async(websocket_task, args=(i,))
         time.sleep(1)
 
     logging.info('Waiting for all subprocesses done...')
