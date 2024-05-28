@@ -35,7 +35,8 @@ def message_handler(_, message):
             #return
         if 'ts' in response:
             ts = response['ts']
-            logging.info(f"pid={os.getpid()} ts={ts} now={current_timestamp_ms} Time difference: {current_timestamp_ms - ts}")
+            logging.info(f"pid={os.getpid()} ts={ts} now={current_timestamp_ms}, "
+                         f"Time difference: {current_timestamp_ms - ts}")
     except ValueError:
         return
 
