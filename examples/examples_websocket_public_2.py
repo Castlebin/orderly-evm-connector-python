@@ -6,6 +6,8 @@ import time, logging
 from orderly_evm_connector.websocket.websocket_api import WebsocketPublicAPIClient
 from datetime import datetime
 import threading
+from concurrent.futures import ThreadPoolExecutor
+import os
 
 (
     orderly_key,
@@ -43,50 +45,47 @@ def message_handler(_, message):
 # Public websocket does not need to pass orderly_key and orderly_secret arguments
 
 
-class AsyncWss(threading.Thread):
-    def __init__(self, wss_client):
-        threading.Thread.__init__(self)
-        self.wss_client = wss_client
-
-    def run(self):
-        wss_client = self.wss_client
-        # #Request orderbook data
-        #wss_client.request_orderbook('orderbook','PERP_BTC_USDC')
-        # #orderbook depth 100 push every 1s
-        #wss_client.get_orderbook('PERP_NEAR_USDC@orderbook')
-        # #orderbookupdate updated orderbook push every 200ms
-        #wss_client.get_orderbookupdate('PERP_BTC_USDC@orderbookupdate')
-        #wss_client.get_trade('PERP_NEAR_USDC@trade')
-        #wss_client.get_24h_ticker('PERP_NEAR_USDC@ticker')
-        #wss_client.get_24h_tickers()
-        #wss_client.get_bbo('PERP_BTC_USDC@bbo')
-        wss_client.get_bbos()
-        #wss_client.get_kline("PERP_NEAR_USDC@kline_1m")
-        #wss_client.get_index_price('PERP_ETH_USDC@indexprice')
-        #wss_client.get_index_prices()
-        # wss_client.get_mark_price('PERP_ETH_USDC@markprice')
-        # wss_client.get_mark_prices()
-        # wss_client.get_open_interest('PERP_ETH_USDC@openinterest')
-        # wss_client.get_estimated_funding_rate('PERP_BTC_USDC@estfundingrate')
-        # wss_client.get_liquidation_push()
-
-        time.sleep(1000)
-        wss_client.stop()
-
-
-for i in range(10):
+def websocket_task(no):
     wss_client = WebsocketPublicAPIClient(
         orderly_testnet=orderly_testnet,
         orderly_account_id=orderly_account_id,
-        wss_id=wss_id + str(i),
+        wss_id=wss_id + str(no),
         on_message=message_handler,
         on_close=on_close,
         debug=True,
     )
+    logging.info(f"Starting websocket thread name: {threading.current_thread().name} , clientId: {wss_client.wss_id}")
+    # #Request orderbook data
+    #wss_client.request_orderbook('orderbook','PERP_BTC_USDC')
+    # #orderbook depth 100 push every 1s
+    #wss_client.get_orderbook('PERP_NEAR_USDC@orderbook')
+    # #orderbookupdate updated orderbook push every 200ms
+    #wss_client.get_orderbookupdate('PERP_BTC_USDC@orderbookupdate')
+    #wss_client.get_trade('PERP_NEAR_USDC@trade')
+    #wss_client.get_24h_ticker('PERP_NEAR_USDC@ticker')
+    #wss_client.get_24h_tickers()
+    #wss_client.get_bbo('PERP_BTC_USDC@bbo')
+    wss_client.get_bbos()
+    #wss_client.get_kline("PERP_NEAR_USDC@kline_1m")
+    #wss_client.get_index_price('PERP_ETH_USDC@indexprice')
+    #wss_client.get_index_prices()
+    # wss_client.get_mark_price('PERP_ETH_USDC@markprice')
+    # wss_client.get_mark_prices()
+    # wss_client.get_open_interest('PERP_ETH_USDC@openinterest')
+    # wss_client.get_estimated_funding_rate('PERP_BTC_USDC@estfundingrate')
+    # wss_client.get_liquidation_push()
 
-    thread = AsyncWss(wss_client)
-    thread.start()
-    thread.join()
-    time.sleep(1)
-    print("Thread finished...exiting")
-    break
+    time.sleep(1000)
+    wss_client.stop()
+
+
+if __name__ == '__main__':
+    pool_size = 10
+    pool = ThreadPoolExecutor(max_workers=pool_size)
+    for i in range(pool_size):
+        pool.submit(websocket_task, i)
+        time.sleep(1)
+
+    pool.shutdown()
+    logging.info('All done.')
+

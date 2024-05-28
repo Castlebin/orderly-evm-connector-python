@@ -32,7 +32,7 @@ def message_handler(_, message):
     try:
         response = json.loads(message)
         #if 'event' in response and response['event'] == 'ping':
-            #return
+        #    return
         if 'ts' in response:
             ts = response['ts']
             logging.info(f"pid={os.getpid()} ts={ts} now={current_timestamp_ms}, "
@@ -79,14 +79,13 @@ def websocket_task(no):
 
 if __name__ == '__main__':
     pool_size = 10
-    p = Pool(pool_size)
+    pool = Pool(pool_size)
     for i in range(pool_size):
-        p.apply_async(websocket_task, args=(i,))
+        pool.apply_async(websocket_task, args=(i,))
         time.sleep(1)
 
-    logging.info('Waiting for all subprocesses done...')
-    p.close()
-    p.join()
+    pool.close()
+    pool.join()
     logging.info('All subprocesses done.')
 
 

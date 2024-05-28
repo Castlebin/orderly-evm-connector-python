@@ -29,8 +29,8 @@ def message_handler(_, message):
 
     try:
         response = json.loads(message)
-        if 'event' in response and response['event'] == 'ping':
-            return
+        #if 'event' in response and response['event'] == 'ping':
+        #    return
         if 'ts' in response:
             ts = response['ts']
             logging.info(f"ts={ts} now={current_timestamp_ms}, Time difference: {current_timestamp_ms - ts}")
