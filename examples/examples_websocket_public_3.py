@@ -6,7 +6,6 @@ import time, logging
 from orderly_evm_connector.websocket.websocket_api import WebsocketPublicAPIClient
 from datetime import datetime
 import os
-import threading
 from multiprocessing import Pool
 
 (
@@ -28,7 +27,7 @@ def message_handler(_, message):
     # 获取当前时间戳（毫秒）
     current_timestamp_ms = int(now.timestamp() * 1000) + now.microsecond // 1000
 
-    logging.info(f"pid={os.getpid()} thread={threading.current_thread().name} {message}")
+    logging.info(f"pid={os.getpid()} {message}")
 
     try:
         response = json.loads(message)
@@ -53,8 +52,7 @@ def websocket_task(no):
         on_close=on_close,
         debug=True,
     )
-    logging.info(f"Starting websocket task: pid={os.getpid()} thread={threading.current_thread().name} "
-                 f"clientId={wss_client.wss_id}")
+    logging.info(f"Starting websocket task: pid={os.getpid()} clientId={wss_client.wss_id}")
     # #Request orderbook data
     #wss_client.request_orderbook('orderbook','PERP_BTC_USDC')
     # #orderbook depth 100 push every 1s
