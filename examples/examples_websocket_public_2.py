@@ -79,11 +79,12 @@ def websocket_task(no):
 
 
 if __name__ == '__main__':
-    pool_size = 10
+    pool_size = 500
     pool = ThreadPoolExecutor(max_workers=pool_size)
     for i in range(pool_size):
         pool.submit(websocket_task, i)
-        time.sleep(1)
+        if i % 50 == 0:
+            time.sleep(1)
 
     pool.shutdown()
     logging.info('All done.')
