@@ -33,7 +33,7 @@ def message_handler(_, message):
         response = json.loads(message)
         #if 'event' in response and response['event'] == 'ping':
         #    return
-        if 'ts' in response and 'topic' in response and response['topic'] == 'orderbookupdate':
+        if 'ts' in response and 'topic' in response and response['topic'] == 'PERP_BTC_USDC@orderbookupdate':
             ts = response['ts']
             logging.info(f"pid={os.getpid()} ts={ts} now={current_timestamp_ms}, {message} "
                          f"Time difference: {current_timestamp_ms - ts}")
